@@ -1,52 +1,50 @@
 import React, { useState } from "react";
-import { Button, Form, FormCheck, FormGroup, Modal } from "react-bootstrap";
-import { useContacts } from "../context/ContactContext";
+import { Modal, Form, Button } from "react-bootstrap";
 import { useConversations } from "../context/ConversationContext";
+import { useContacts } from "../context/ContactContext";
 
-const NewConversationModal = ({ closeModal }) => {
-  const [selectedContactId, setSelectedContactId] = useState([]);
+export default function NewConversationModal({ closeModal }) {
+  const [selectedContactIds, setSelectedContactIds] = useState([]);
   const { contacts } = useContacts();
   const { createConversation } = useConversations();
 
-  const handleCheckboxChange = (contactId) => {
-    setSelectedContactId((prev) => {
-      if (prev.includes(contactId)) {
-        return prev.filter((prevId) => {
-          return prevId !== contactId;
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    createConversation(selectedContactIds);
+    closeModal();
+  }
+
+  function handleCheckboxChange(contactId) {
+    setSelectedContactIds((prevSelectedContactIds) => {
+      if (prevSelectedContactIds.includes(contactId)) {
+        return prevSelectedContactIds.filter((prevId) => {
+          return contactId !== prevId;
         });
       } else {
-        return [...prev, contactId];
+        return [...prevSelectedContactIds, contactId];
       }
     });
-  };
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    createConversation(selectedContactId);
-    closeModal();
-  };
   return (
     <>
-      <Modal.Header closeButton className="border-1">
-        Conversation
-      </Modal.Header>
+      <Modal.Header closeButton>Create Conversation</Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
           {contacts.map((contact) => (
-            <FormGroup controlId={contact.id} key={contact.id} className="mb-2">
-              <FormCheck
+            <Form.Group controlId={contact.id} key={contact.id}>
+              <Form.Check
                 type="checkbox"
-                value={selectedContactId.includes(contact.id)}
+                value={selectedContactIds.includes(contact.id)}
                 label={contact.name}
                 onChange={() => handleCheckboxChange(contact.id)}
               />
-            </FormGroup>
+            </Form.Group>
           ))}
           <Button type="submit">Create</Button>
         </Form>
       </Modal.Body>
     </>
   );
-};
-
-export default NewConversationModal;
+}

@@ -20,7 +20,6 @@ export function ConversationsProvider({ id, children }) {
     "conversations",
     []
   );
-  console.log(`CONVER: `, conversations);
   const [selectedConversationIndex, setSelectedConversationIndex] = useState(0);
   const { contacts } = useContacts();
   const socket = useSocket();
