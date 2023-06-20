@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { Form, InputGroup, Button } from "react-bootstrap";
 import { useConversations } from "../context/ConversationContext";
 
-export default function OpenConversation() {
+const OpenConversation = () => {
   const [text, setText] = useState("");
   const setRef = useCallback((node) => {
     if (node) {
@@ -67,12 +67,14 @@ export default function OpenConversation() {
               onChange={(e) => setText(e.target.value)}
               style={{ height: "75px", resize: "none" }}
             />
-            <InputGroup.Append>
+            <InputGroup>
               <Button type="submit">Send</Button>
-            </InputGroup.Append>
+            </InputGroup>
           </InputGroup>
         </Form.Group>
       </Form>
     </div>
   );
-}
+};
+
+export default OpenConversation;
